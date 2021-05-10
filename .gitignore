@@ -1,0 +1,4 @@
+/.vs
+/dingding-robot/__pycache__
+*.pyc
+*.sln

@@ -1,0 +1,150 @@
+﻿<!DOCTYPE html>
+<html lang="zh"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>encrypt</title>
+    <link rel="icon" href="1.ico" type="image/x-icon">
+    <meta name="keywords" content="encrypt">
+    <meta name="description" content="encrypt工具">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<!--<style> 
+    html { 
+        -webkit-filter: grayscale(100%); 
+        -moz-filter: grayscale(100%); 
+        -ms-filter: grayscale(100%); 
+        -o-filter: grayscale(100%); 
+        filter:progid:DXImageTransform.Microsoft.BasicImage(grayscale=1);  
+        _filter:none; 
+    } 
+</style> -->
+    <!--<script src="/static/scripts/encrypt_hm.js"></script><script>
+      var timeOutEvent = setTimeout(function(){
+        window.location.href = "/index1.html";
+      }, 6000);
+    </script>-->
+
+    <link href="/static/content/encryptYaml_bootstrap.min.css" rel="stylesheet">
+    <link href="/static/content/bootstrap-theme.min.css" rel="stylesheet">
+
+    <script src="/static/scripts/encrypt_jquery.min.js"></script>
+    <script src="/static/scripts/bootstrap.min.js"></script>
+
+    <!--<script>
+      setTimeout(function(){
+        clearTimeout(timeOutEvent);
+      }, 0)
+    </script>-->
+
+
+    <!--<script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?xxxx";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>-->
+
+</head>
+<body class="" style="">
+<div class="container-fluid">
+    <div class="page-header">
+        <h1>encrypt <small> -- 字段包含 {{ fields }} 关键字时会自动加密 -- <span style="color: red"> *加密内容多行时请手动加密。 </span> <a href="/about"><span>v1</span></a></small></h1>
+    </div>
+    <div class="row vertical-middle">
+        <div class="col-md-5 col-lg-5">
+            <div class="panel  panel-primary">
+                <div class="panel-body">
+                    <textarea id="from" style="font-size:19px; " rows="50" class="form-control" placeholder="origin content"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-1 col-lg-1 text-center" style="line-height: 500px;">
+            <div class="btn-group-vertical">
+
+                <form id="env" class="btn btn-primary">
+                    env：<input type="radio" name="env" checked="checked" value="rc">rc
+                    <input type="radio" name="env" value="pro">pro
+
+                </form>
+                <input class="btn btn-primary" type="button" value="encrypt &gt;&gt;" onclick="Base.encrypt()">
+                <!--<input class="btn btn-primary" style="margin-top: 10px;" type="button" value="庸俗按钮" onclick="window.open(&#39;https://github.com/best1s;)">-->
+                <!--<input class="btn btn-primary" style="margin-top: 10px;" type="button" value="&lt;&lt; drcrypt" onclick="Base.decrypt()">-->
+            </div>
+        </div>
+
+        <div class="col-md-5 col-lg-5">
+            <div class="panel  panel-primary">
+                <div class="panel-body">
+                    <textarea id="to" style="font-size:19px; " rows="50" class="form-control" placeholder="encrypt content"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade in" id="loadingModal" style="display: none;">
+        <div style="width: 200px;height:20px; z-index: 20000; position: absolute; text-align: center; left: 50%; top: 50%;margin-left:-100px;margin-top:-10px">
+            <div class="progress progress-striped active" style="margin-bottom: 0;">
+                <div class="progress-bar" style="width: 100%;"></div>
+            </div>
+
+        </div>
+    </div>
+    <footer>
+        <div class="row">
+            <div class="col-md-11 col-lg-11 text-center">
+                <div class="fixed">
+                    <a target="_blank" href="https://beian.miit.gov.cn/">ICP备xxxx号-1</a>
+                    <br>
+                    Copyright &copy; {{ year }}
+                    <br>
+                    <!--E-Mail:<code></code>-->
+                </div>
+
+            </div>
+        </div>
+    </footer>
+</div>
+
+<script>
+    var toEncryptUrl="/e";
+    var toPropUrl="/d";
+    var Base = {
+        encrypt : function () {
+            Base.showLoading();
+            $.ajax({
+                type: "post",
+                data: { "encrypt_data": $('#from').val(), "env": $('#env :radio[name="env"]:checked').val()},
+                url: toEncryptUrl,
+                dataType:"text",
+                success: function(data) {
+                    $('#to').val(data);
+                    Base.hideLoading();
+                }
+            });
+        },
+        decrypt : function () {
+            Base.showLoading();
+            $.ajax({
+                type: "post",
+                data:{"yaml":$('#to').val()},
+                url: toPropUrl,
+                dataType:"text",
+                success: function(data) {
+                    $('#from').val(data);
+                    Base.hideLoading();
+                }
+            });
+        },
+        showLoading : function () {
+            $("#loadingModal").modal('show');
+        },
+        hideLoading : function () {
+            $('#loadingModal').modal('hide');
+        }
+    }
+
+</script>
+
+
+</body></html>
